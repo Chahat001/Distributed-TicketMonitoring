@@ -1,0 +1,40 @@
+## Use random load balancer IPs using an initContainer that waits for the IPs to be ready and discover them automatically.
+externalAccess:
+  enabled: true
+  broker:
+    service:  
+      type: LoadBalancer
+      ports:
+        external: 9094
+  controller:
+    service:
+      type: LoadBalancer
+      containerPorts:
+        external: 9094
+  autoDiscovery:
+    enabled: true
+serviceAccount:
+  create: true
+rbac:
+  create: true
+
+
+## Kafka provisioning parameters
+
+#provisioning:
+  numPartitions: 1 # default value 1
+  replicationFactor: 1 # default value 1
+
+
+#   kafka: controller-automountServiceAccountToken
+#    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+#    an initContainer will be used to auto-detect the external IPs/ports by querying the
+#    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+#    and broker.automountServiceAccountToken=true.
+
+
+controller:
+  automountServiceAccountToken: true
+
+broker:
+  automountServiceAccountToken: true
